@@ -1,2 +1,9 @@
-# SLOG
-A macro to SPDLOG  for speedup use
+# SLOGGER
+## 简介
+SLOGGER 是一个基于Spdlog 封装的宏库，旨在简洁高效地输出日至
+
+
+## 目标
+1. 便捷调用
+2. 分级调用
+3. 宏调用
