@@ -9,7 +9,8 @@
 #define ERR         spdlog::level::level_enum::err
 #define TERMINAL    spdlog::level::level_enum::critical
 
-#define LOG(level, msg, args...) spdlog::get("muti_logger")->log(level, msg, args)
+#define LOG(level, msg, args...) \
+    spdlog::get("muti_logger")->log(level, msg, ##args)
 
 namespace SLOG {
 void Init(const std::string& filename, const spdlog::level::level_enum& level, const bool& mulThread);
