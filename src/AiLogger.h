@@ -1,6 +1,7 @@
 #ifndef AILOGGER_H
 #define AILOGGER_H
 #include <string>
+#include <memory>
 #include "header.h"
 
 #define OFF_LOG     0
@@ -48,34 +49,34 @@ public:
     bool isCriticalEnable();
 
     template<typename... Args>
-    void error(spdlog::source_loc &loc, std::uint64_t &errorcode, std::uint64_t &traceid, std::string &msg, Args &...args);
+    void error(spdlog::source_loc &loc, std::uint64_t &errorcode, std::string &traceid, std::string &msg, Args &...args);
 
     template<typename... Args>
-    void error(spdlog::source_loc &&loc, std::uint64_t &&errorcode, std::uint64_t &&traceid, std::string &&msg, Args &...args);
+    void error(spdlog::source_loc &&loc, std::uint64_t &&errorcode, std::string &&traceid, std::string &&msg, Args &...args);
 
     template<typename... Args>
-    void warn(spdlog::source_loc &loc, std::uint64_t &traceid, std::string &msg, Args &...args);
+    void warn(spdlog::source_loc &loc, std::string &traceid, std::string &msg, Args &...args);
 
     template<typename... Args>
-    void warn(spdlog::source_loc &&loc, std::uint64_t &&traceid, std::string &&msg, Args &...args);
+    void warn(spdlog::source_loc &&loc, std::string &&traceid, std::string &&msg, Args &...args);
 
     template<typename... Args>
-    void info(spdlog::source_loc& loc, std::uint64_t &traceid, std::string &msg,  Args &...args);
+    void info(spdlog::source_loc& loc, std::string &traceid, std::string &msg,  Args &...args);
 
     template<typename... Args>
-    void info(spdlog::source_loc &&loc, std::uint64_t &&traceid, std::string &&msg, Args &...args);
+    void info(spdlog::source_loc &&loc, std::string &&traceid, std::string &&msg, Args &...args);
 
     template<typename... Args>
-    void debug(spdlog::source_loc &loc, std::uint64_t &traceid, std::string &msg,  Args &...args);
+    void debug(spdlog::source_loc &loc, std::string &traceid, std::string &msg,  Args &...args);
 
     template<typename... Args>
-    void debug(spdlog::source_loc &&loc, std::uint64_t &&traceid, std::string &&msg, Args &...args);
+    void debug(spdlog::source_loc &&loc, std::string &&traceid, std::string &&msg, Args &...args);
 
     template<typename... Args>
-    void critical(spdlog::source_loc &loc, std::uint64_t &traceid, std::string &msg,  Args &...args);
+    void critical(spdlog::source_loc &loc, std::string &traceid, std::string &msg,  Args &...args);
 
     template<typename... Args>
-    void critical(spdlog::source_loc &&loc, std::uint64_t &&traceid, std::string &&msg, Args &...args);
+    void critical(spdlog::source_loc &&loc, std::string &&traceid, std::string &&msg, Args &...args);
 
 private:
     AiLogger();
@@ -97,41 +98,41 @@ private:
     std::string _logbasepath;
 
     LOG_LEVEL _level;
-
+    
     static  AiLogger* log_ptr;
 };
 
 
 template<typename... Args>
-void AiLogger::error(spdlog::source_loc& loc, std::uint64_t &errorcode, std::uint64_t &traceid, std::string &msg, Args &...args) {
+void AiLogger::error(spdlog::source_loc& loc, std::uint64_t &errorcode, std::string &traceid, std::string &msg, Args &...args) {
     if(!isErrEnable()) {
         return;
     }
-    std::string message = std::to_string(traceid) + ":[AiLogger][" + std::to_string(errorcode) + "] " + to_json(msg);
+    std::string message = traceid + ":[AiLogger][" + std::to_string(errorcode) + "] " + to_json(msg);
     spdlog::get("err_log")->log(loc, spdlog::level::err, message, args...);
 }
 
 template<typename... Args>
-void AiLogger::error(spdlog::source_loc &&loc, std::uint64_t &&errorcode, std::uint64_t &&traceid, std::string &&msg, Args &...args) {
+void AiLogger::error(spdlog::source_loc &&loc, std::uint64_t &&errorcode, std::string &&traceid, std::string &&msg, Args &...args) {
     AiLogger::error(loc, errorcode, traceid, msg, args...);
 }
 
 template<typename... Args>
-void AiLogger::warn(spdlog::source_loc& loc, std::uint64_t &traceid, std::string &msg, Args &...args) {
+void AiLogger::warn(spdlog::source_loc& loc, std::string &traceid, std::string &msg, Args &...args) {
     if(!isWarnEnable()) {
         return;
     }
-    std::string message = std::to_string(traceid) + ":[AiLogger]" + to_json(msg);
+    std::string message = traceid + ":[AiLogger]" + to_json(msg);
     spdlog::get("warn_log")->log(loc, spdlog::level::warn, message, args...);
 }
 
 template<typename... Args>
-void AiLogger::warn(spdlog::source_loc &&loc, std::uint64_t &&traceid, std::string &&msg, Args &...args) {
+void AiLogger::warn(spdlog::source_loc &&loc, std::string &&traceid, std::string &&msg, Args &...args) {
     AiLogger::warn(loc, traceid, msg, args...);
 }
 
 template<typename... Args>
-void AiLogger::info(spdlog::source_loc& loc, std::uint64_t &traceid, std::string &msg,  Args &...args) {
+void AiLogger::info(spdlog::source_loc& loc, std::string &traceid, std::string &msg,  Args &...args) {
     if(!isInfoEnable()) {
         return;
     }
@@ -140,12 +141,12 @@ void AiLogger::info(spdlog::source_loc& loc, std::uint64_t &traceid, std::string
 }
 
 template<typename... Args>
-void AiLogger::info(spdlog::source_loc &&loc, std::uint64_t &&traceid, std::string &&msg, Args &...args) {
+void AiLogger::info(spdlog::source_loc &&loc, std::string &&traceid, std::string &&msg, Args &...args) {
     AiLogger::info(loc, traceid, msg, args...);
 }
 
 template<typename... Args>
-void AiLogger::debug(spdlog::source_loc& loc, std::uint64_t &traceid, std::string &msg,  Args &...args) {
+void AiLogger::debug(spdlog::source_loc& loc, std::string &traceid, std::string &msg,  Args &...args) {
     if(!isDebugEnable()) {
         return;
     }
@@ -154,13 +155,13 @@ void AiLogger::debug(spdlog::source_loc& loc, std::uint64_t &traceid, std::strin
 }
 
 template<typename... Args>
-void AiLogger::debug(spdlog::source_loc &&loc, std::uint64_t &&traceid, std::string &&msg, Args &...args) {
+void AiLogger::debug(spdlog::source_loc &&loc, std::string &&traceid, std::string &&msg, Args &...args) {
     AiLogger::debug(loc, traceid, msg, args...);
 }
 
 
 template<typename... Args>
-void AiLogger::critical(spdlog::source_loc& loc, std::uint64_t &traceid, std::string &msg,  Args &...args) {
+void AiLogger::critical(spdlog::source_loc& loc, std::string &traceid, std::string &msg,  Args &...args) {
     if(!isCriticalEnable()) {
         return;
     }
@@ -169,20 +170,20 @@ void AiLogger::critical(spdlog::source_loc& loc, std::uint64_t &traceid, std::st
 }
 
 template<typename... Args>
-void AiLogger::critical(spdlog::source_loc &&loc, std::uint64_t &&traceid, std::string &&msg, Args &...args) {
+void AiLogger::critical(spdlog::source_loc &&loc, std::string &&traceid, std::string &&msg, Args &...args) {
     AiLogger::critical(loc, traceid, msg, args...);
 }
 
 #define TRACE spdlog::source_loc(__FILE__, __LINE__, SPDLOG_FUNCTION)
 #define LOG_ERR(errcode, traceid, msg, args...) \
-    AiLogger::getLogger()->error(TRACE, errcode, traceid, msg, args)
+    AiLogger::getLogger()->error(TRACE, errcode, traceid, msg, ##args)
 #define LOG_WARN(traceid, msg, args...) \
-    AiLogger::getLogger()->warn(TRACE, traceid, msg, args)
+    AiLogger::getLogger()->warn(TRACE, traceid, msg, ##args)
 #define LOG_INFO(traceid, msg, args...) \
-    AiLogger::getLogger()->info(TRACE, traceid, msg, args)
+    AiLogger::getLogger()->info(TRACE, traceid, msg, ##args)
 #define LOG_DEBUG(traceid, msg, args...) \
-    AiLogger::getLogger()->debug(TRACE, traceid, msg, args)
+    AiLogger::getLogger()->debug(TRACE, traceid, msg, ##args)
 #define LOG_CRI(traceid, msg, args...) \
-    AiLogger::getLogger()->critical(TRACE, traceid, msg, args)
+    AiLogger::getLogger()->critical(TRACE, traceid, msg, ##args)
 
 #endif

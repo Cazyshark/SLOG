@@ -8,5 +8,6 @@
 #include <spdlog/details/backtracer.h>
 #include <spdlog/details/file_helper.h>
 #include <spdlog/async.h>
+#include <spdlog/sinks/stdout_color_sinks.h>
 
 #endif

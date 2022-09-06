@@ -10,6 +10,7 @@ void AiLogger::Init(std::string &logname, std::string &logpath, std::string &log
         this->_logbasepath = logpath + '/' + logname;
         setLevel(loglevel);
         spdlog::init_thread_pool(1024 * 1024 * 64, 10);
+        // 终端是默认要打开的
         if(isErrEnable())       setErr();
         if(isWarnEnable())      setWarn();
         if(isInfoEnable())      setInfo();
@@ -74,7 +75,9 @@ AiLogger::AiLogger(){
 void AiLogger::setErr() {
     std::string logname = this->_logbasepath + "_err.log";
     auto err_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt> (logname);
-    auto err_log = std::make_shared<spdlog::async_logger> ("err_log", err_sink, spdlog::thread_pool(), spdlog::async_overflow_policy::block);
+    auto std_out = std::make_shared<spdlog::sinks::stdout_color_sink_mt> ();
+    std::vector<spdlog::sink_ptr> sinks {err_sink, std_out};
+    auto err_log = std::make_shared<spdlog::async_logger> ("err_log", sinks.begin(), sinks.end(), spdlog::thread_pool(), spdlog::async_overflow_policy::block);
     err_log->set_level(spdlog::level::level_enum::err);
     err_log->set_pattern("%Y-%m-%d %H:%M:%S.%e %t %l %s[%#]-%v");
     err_log->should_backtrace();
@@ -85,7 +88,9 @@ void AiLogger::setErr() {
 void AiLogger::setWarn() {
     std::string logname = this->_logbasepath + "_warn.log";
     auto warn_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt> (logname);
-    auto warn_log = std::make_shared<spdlog::async_logger> ("warn_log", warn_sink, spdlog::thread_pool(), spdlog::async_overflow_policy::block);
+    auto std_out = std::make_shared<spdlog::sinks::stdout_color_sink_mt> ();
+    std::vector<spdlog::sink_ptr> sinks {warn_sink, std_out};
+    auto warn_log = std::make_shared<spdlog::async_logger> ("warn_log", sinks.begin(), sinks.end(), spdlog::thread_pool(), spdlog::async_overflow_policy::block);
     warn_log->set_level(spdlog::level::level_enum::warn);
     warn_log->set_pattern("%Y-%m-%d %H:%M:%S.%e %t %l %s[%#]-%v");
     warn_log->should_backtrace();
@@ -96,7 +101,9 @@ void AiLogger::setWarn() {
 void AiLogger::setInfo() {
     std::string logname = this->_logbasepath + "_info.log";
     auto info_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt> (logname);
-    auto info_log = std::make_shared<spdlog::async_logger> ("info_log", info_sink, spdlog::thread_pool(), spdlog::async_overflow_policy::block);
+    auto std_out = std::make_shared<spdlog::sinks::stdout_color_sink_mt> ();
+    std::vector<spdlog::sink_ptr> sinks {info_sink, std_out};
+    auto info_log = std::make_shared<spdlog::async_logger> ("info_log", sinks.begin(), sinks.end(), spdlog::thread_pool(), spdlog::async_overflow_policy::block);
     info_log->set_level(spdlog::level::level_enum::info);
     info_log->set_pattern("%Y-%m-%d %H:%M:%S.%e %t %l %s[%#]-%v");
     info_log->should_backtrace();
@@ -107,7 +114,9 @@ void AiLogger::setInfo() {
 void AiLogger::setDebug() {
     std::string logname = this->_logbasepath + "_debug.log";
     auto debug_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt> (logname);
-    auto debug_log = std::make_shared<spdlog::async_logger> ("debug_log", debug_sink, spdlog::thread_pool(), spdlog::async_overflow_policy::block);
+    auto std_out = std::make_shared<spdlog::sinks::stdout_color_sink_mt> ();
+    std::vector<spdlog::sink_ptr> sinks {debug_sink, std_out};
+    auto debug_log = std::make_shared<spdlog::async_logger> ("debug_log", sinks.begin(), sinks.end(), spdlog::thread_pool(), spdlog::async_overflow_policy::block);
     debug_log->set_level(spdlog::level::level_enum::debug);
     debug_log->set_pattern("%Y-%m-%d %H:%M:%S.%e %t %l %s[%#]-%v");
     debug_log->should_backtrace();
@@ -118,7 +127,9 @@ void AiLogger::setDebug() {
 void AiLogger::setCritical() {
     std::string logname = this->_logbasepath + "_critical.log";
     auto cri_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt> (logname);
-    auto cri_log = std::make_shared<spdlog::async_logger> ("cri_log", cri_sink, spdlog::thread_pool(), spdlog::async_overflow_policy::block);
+    auto std_out = std::make_shared<spdlog::sinks::stdout_color_sink_mt> ();
+    std::vector<spdlog::sink_ptr> sinks {cri_sink, std_out};
+    auto cri_log = std::make_shared<spdlog::async_logger> ("cri_log", sinks.begin(), sinks.end(), spdlog::thread_pool(), spdlog::async_overflow_policy::block);
     cri_log->set_level(spdlog::level::level_enum::critical);
     cri_log->set_pattern("%Y-%m-%d %H:%M:%S.%e %t %l %s[%#]-%v");
     cri_log->should_backtrace();
